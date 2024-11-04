@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 var morgan = require('morgan')
+const cors = require('cors')
 
 
 let persons = [
@@ -32,8 +33,9 @@ morgan.token('body', (req, res) => {
 
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-
+app.use(express.static('dist'))
+app.use(cors())
+app.use(express.static('dist'))
 
 app.get('/info', (request, response) => {
     response.send(`<p>Phone book has info for ${persons.length} people</p>
@@ -91,7 +93,7 @@ function getRandomInt(max) {
   }
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
